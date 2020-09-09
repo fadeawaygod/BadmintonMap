@@ -6,14 +6,12 @@
       map-type-id="roadmap"
       style="width:100%; height: 100%"
     >
-      <!-- <GmapMarker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
+      <GmapMarker
+        label="🎾"
+        :position="{lat:25.04, lng:121.52}"
         :clickable="true"
         :draggable="true"
-        @click="center=m.position"
-      />-->
+      />
     </GmapMap>
   </div>
 </template>
