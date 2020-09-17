@@ -1,5 +1,20 @@
 <template>
   <div class="hello">
+    <b-button v-b-modal.post-window>揪團!</b-button>
+    <b-modal id="post-window" title="來揪團吧">
+      <label>日期</label>
+      <b-form-input :type="date"></b-form-input>
+      <label>起始時間</label>
+      <b-form-input :type="time"></b-form-input>
+      <label>結束時間</label>
+      <b-form-input :type="time"></b-form-input>
+      <label>場地數</label>
+      <b-form-input :type="number"></b-form-input>
+      <label>人數</label>
+      <b-form-input :type="number"></b-form-input>
+      <label>價格</label>
+      <b-form-input :type="number"></b-form-input>
+    </b-modal>
     <GmapMap
       :center="{lat:25.04, lng:121.52}"
       :zoom="13"
