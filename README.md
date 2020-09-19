@@ -3,6 +3,7 @@
 ## Project setup
 ```
 yarn install
+yarn add less less-loader
 ```
 
 ### Compiles and hot-reloads for development
