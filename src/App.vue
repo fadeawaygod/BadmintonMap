@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import simulate from "@/tools/simulate"
 const MAP_CENTER_COORIDINATE = { lat: 25.039, lng: 121.512 };
 const DEFULAT_MAP_ZOOM = 14;
 
@@ -13,7 +14,8 @@ export default {
   data() {
     return {
       map: {},
-      markers: [{ cooridinate: { lat: 25.039, lng: 121.512 } }]
+      markers: [{ cooridinate: { lat: 25.039, lng: 121.512 } }],
+      googleMapMarkers: []
     };
   },
   async mounted() {
@@ -21,14 +23,33 @@ export default {
       zoom: DEFULAT_MAP_ZOOM,
       center: MAP_CENTER_COORIDINATE
     });
-    // The marker, positioned at Uluru
-    for (let mark of this.markers) {
-      new window.google.maps.Marker({
-        position: mark.cooridinate,
-        map: this.map
-      });
+    this.refreshMarkers();
+    this.removeGoogleAlertWindow();
+   
+  },
+  methods:{
+    refreshMarkers(){
+      for (let marker of this.markers) {
+        let googleMapMarker = new window.google.maps.Marker({
+          position: marker.cooridinate,
+          map: this.map,
+          label:"🏸",
+          animation: window.google.maps.Animation.DROP,
+          title: 'Hello World!'
+        });
+        googleMapMarker.addListener('click', ()=>alert('test'));
+        this.googleMapMarkers.push(googleMapMarker);
+      } 
+    
+
+    },
+    removeGoogleAlertWindow(){
+      setTimeout(()=>{
+      simulate(document.getElementsByClassName("dismissButton")[0], "click");  
+    }, 800);
     }
   }
+
 };
 </script>
 
