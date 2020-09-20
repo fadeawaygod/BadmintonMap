@@ -1,11 +1,11 @@
 <template>
   <transition name="fade">
     <div class="modal" v-if="show">
-      <div class="modal__backdrop" @click="closeModal()" />
-      <div class="modal__dialog">
-        <div class="modal__header">
+      <div class="backdrop" @click="closeModal()" />
+      <div class="dialog">
+        <div class="header">
           <slot name="header" />
-          <button type="button" class="modal__close" @click="closeModal()">
+          <button type="button" class="close" @click="closeModal()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512">
               <path
                 fill="currentColor"
@@ -15,11 +15,11 @@
           </button>
         </div>
 
-        <div class="modal__body">
+        <div class="body">
           <slot name="body" />
         </div>
 
-        <div class="modal__footer">
+        <div class="footer">
           <slot name="footer" />
         </div>
       </div>
@@ -59,7 +59,7 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 9;
-  &__backdrop {
+  .backdrop {
     background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
     top: 0;
@@ -68,7 +68,7 @@ export default {
     left: 0;
     z-index: 1;
   }
-  &__dialog {
+  .dialog {
     background-color: #ffffff;
     position: relative;
     width: 600px;
@@ -81,24 +81,24 @@ export default {
       width: 90%;
     }
   }
-  &__close {
+  .close {
     width: 30px;
     height: 30px;
   }
-  &__header {
-    padding: 20px 20px 10px;
+  .header {
+    padding: 0px 20px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
   }
-  &__body {
+  .body {
     padding: 10px 20px 10px;
     overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: stretch;
   }
-  &__footer {
+  .footer {
     padding: 10px 20px 20px;
   }
 }

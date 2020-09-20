@@ -4,6 +4,9 @@
 ```
 yarn install
 yarn add less less-loader
+
+setup firebase config in sec/main.js
+setup google map api key in public/index.html
 ```
 
 ### Compiles and hot-reloads for development
