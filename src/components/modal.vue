@@ -97,6 +97,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    max-height: 450px;
   }
   .footer {
     padding: 10px 20px 20px;

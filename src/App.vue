@@ -1,55 +1,52 @@
 <template>
   <div id="app">
     <div id="map" ref="map"></div>
-    <button @click="this.$refs.modalName.show = true">post a party</button>
-    <modal ref="modalName">
+    <button @click="this.$refs.newPostModal.show = true">post a party</button>
+    <modal ref="newPostModal">
       <template v-slot:header>
         <h1>新增糾團</h1>
       </template>
-
       <template v-slot:body>
         <div class="row">
-          <p class="label">人數</p>
-          <input type="text" />
+          <p class="label">開始時間</p>
+          <input v-model="newPost.startTime" type="datetime-local" />
         </div>
         <div class="row">
-          <p class="label">時間</p>
-          <input type="text" />
+          <p class="label">結束時間</p>
+          <input v-model="newPost.endTime" type="datetime-local" />
         </div>
         <div class="row">
-          <p class="label">地點</p>
-          <input type="text" />
+          <p class="label">地點名稱</p>
+          <input v-model="newPost.location.name" type="text" />
+        </div>
+        <div class="row">
+          <p class="label">地點經度</p>
+          <input
+            v-model.number="newPost.location.cooridinate.lng"
+            type="number"
+          />
+        </div>
+        <div class="row">
+          <p class="label">地點緯度</p>
+          <input
+            v-model.number="newPost.location.cooridinate.lat"
+            type="number"
+          />
         </div>
         <div class="row">
           <p class="label">場地數</p>
-          <input type="text" />
-        </div>
-        <div class="row">
-          <p class="label">費用</p>
-          <input type="text" />
-        </div>
-        <div class="row">
-          <p class="label">徵求人數</p>
-          <input type="text" />
-        </div>
-        <div class="row">
-          <p class="label">技術等級</p>
-          <input type="text" />
-        </div>
-        <div class="row">
-          <p class="label">性別</p>
-          <input type="text" />
+          <input v-model.number="newPost.courtCount" type="number" />
         </div>
         <div class="row">
           <p class="label">用球</p>
-          <input type="text" />
+          <input v-model="newPost.shuttlecock" type="text" />
         </div>
       </template>
 
       <template v-slot:footer>
         <div>
-          <button @click="$refs.modalName.closeModal()">Cancel</button>
-          <button @click="$refs.modalName.closeModal()">Save</button>
+          <button @click="$refs.newPostModal.closeModal()">Cancel</button>
+          <button @click="createPost">Save</button>
         </div>
       </template>
     </modal>
@@ -73,10 +70,10 @@ export default {
   data() {
     return {
       map: {},
-      markers: [{ cooridinate: { lat: 25.039, lng: 121.512 } }],
       googleMapMarkers: [],
-      newPost: {},
-      db: undefined
+      newPost: this.initEmptyPost(),
+      db: undefined,
+      displayPosts: []
     };
   },
   async mounted() {
@@ -84,23 +81,20 @@ export default {
       zoom: DEFULAT_MAP_ZOOM,
       center: MAP_CENTER_COORIDINATE
     });
-    this.refreshMarkers();
     this.removeGoogleAlertWindow();
     this.db = firebase.firestore();
-    this.db
-      .collection("post")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          console.log(`${doc.id} => ${doc.data()}`);
-        });
-      });
+    await this.getPosts();
   },
   methods: {
+    async getPosts() {
+      let querySnapshot = await this.db.collection("post").get();
+      this.displayPosts = querySnapshot.docs.map(doc => doc.data());
+      this.refreshMarkers();
+    },
     refreshMarkers() {
-      for (let marker of this.markers) {
+      for (let post of this.displayPosts) {
         let googleMapMarker = new window.google.maps.Marker({
-          position: marker.cooridinate,
+          position: post.location.cooridinate,
           map: this.map,
           label: "🏸",
           animation: window.google.maps.Animation.DROP,
@@ -121,6 +115,29 @@ export default {
         }
         simulate(document.getElementsByClassName("dismissButton")[0], "click");
       }, 50);
+    },
+    initEmptyPost() {
+      return {
+        startTime: undefined,
+        endTime: undefined,
+        location: {
+          name: "",
+          cooridinate: {
+            lat: 25.039,
+            lng: 121.512
+          }
+        },
+        courtCount: 1,
+        shuttlecock: "AS 50",
+        requests: []
+      };
+    },
+    async createPost() {
+      await this.db.collection("post").add(this.newPost);
+      await this.getPosts();
+
+      this.newPost = this.initEmptyPost();
+      this.$refs.newPostModal.closeModal();
     }
   }
 };
