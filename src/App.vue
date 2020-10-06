@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="map" ref="map"></div>
-    <button @click="this.$refs.modalName.show=true">post a party</button>
+    <button @click="this.$refs.modalName.show = true">post a party</button>
     <modal ref="modalName">
       <template v-slot:header>
         <h1>新增糾團</h1>
@@ -66,6 +66,7 @@ const DEFULAT_MAP_ZOOM = 14;
 
 export default {
   name: "App",
+  setup() {},
   components: {
     Modal
   },
